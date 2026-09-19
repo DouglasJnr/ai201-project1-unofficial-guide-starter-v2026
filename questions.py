@@ -26,7 +26,7 @@ QUESTIONS = [
     {"question": "What is the bus service schedule in Kestrelford throughout the week", "expects": "service is hourly on weekdays, two-hourly on Saturdays"},
     {"question": "What are the operation hours where I can buy food outside Marchwood", "expects": "stop serving at 9pm"},
     {"question": "What is the accessibility of Thornby wells", "expects": "everything is within"},
-    {"question": "When is it cheapest to book tickets when travelling by railway", "expects": "considerably heaper"},
+    {"question": "When is it cheapest to book tickets when travelling by railway", "expects": "considerably cheaper"},
     {"question": "Which town(s) in the region has a hospital?", "expects": "has a hospital"},
 ]
 
@@ -38,7 +38,7 @@ QUESTIONS = [
 # records what happened, so criterion 3 has evidence in the run log alongside
 # the others. They cost no model calls: a refusal never reaches the model.
 OUT_OF_SCOPE = [
-    "What bus terminals are there Silicon Valley",
+    "What bus terminals are there in Silicon Valley",
     "How do I change the oil in a diesel engine?",
     "Who won the 1994 World Cup?",
     "What is the recommended dosage of ibuprofen for a headache?",
