@@ -23,6 +23,8 @@ For at least 4 of my 5 test questions, the retrieved chunks include one that
 contains the answer.
 
 **Why this target:**
+
+All 5 of my questions are about topics that 1-2 documents mention. So I expect the possibility of a missed answer due to hitting edge cases like ambiguous phrasing or an answer split across a chunk boundary.
 <!-- e.g. "One of my questions is about a topic only two documents mention, so
      I expect that one to be hard." -->
 
@@ -33,6 +35,7 @@ contains the answer.
 Every answer the system produces names at least one source document.
 
 **Why this target:**
+This is a fairly retrieval problem and some questions may draw from more than one document, so requiring exactly one would penalize a correct multi-source answer.
 <!-- Why all five and not four? What about your setup makes that achievable —
      or what would have to go wrong for it not to be? -->
 
@@ -50,12 +53,16 @@ in at least 4 of 5 tries.
      just keep five of them, or the "4 of 5" above has nothing to be 4 of. -->
 
 **Why this target:**
+The out-of-scope questions can be close to the boundary depending on vocabulary overlap, and one slipping through wouldn't indicate the system is broken.
+
 <!-- What did your distances look like when you set the cutoff in Milestone 4?
      Was there a clean gap, or did the two groups overlap? -->
 
 ---
 
 ## 4. Something about your chunks
+
+For all 5 of my test questions,there are at least 5 retrieved chunks.
 
 <!-- YOU WRITE THIS ONE.
 
@@ -72,12 +79,14 @@ in at least 4 of 5 tries.
 
 
 **Why this target:**
-
+<!-- Having at least 5 retrieved chunks ensures we are not just returning the entire document when finding an answer, while also making sure that we are not capturing too much information in each chunk we return. 
 
 
 ---
 
-## 5. Your choice
+## 5. Answers from pre-designated document
+
+For all 5 of my test questions, every answer the system produces is retrieved from the pre-designated source document.
 
 <!-- YOU WRITE THIS ONE TOO.
 
@@ -90,7 +99,7 @@ in at least 4 of 5 tries.
 
 
 **Why this target:**
-
+The questions I asked are very particular, and the answers will be found in only 1 source document or at most 2 source documents. However, in the case of an answer having 2 source documents, 1 document has a more particular answer relating to the question.
 
 
 ---
