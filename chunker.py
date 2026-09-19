@@ -25,8 +25,10 @@ your pipeline, not giving up.
 from dataclasses import dataclass
 
 import config
+import re
 from ingest import Document
-
+_SENTENCE_SPLIT = re.compile(r"(?<=[.!?])\s+")
+_PARAGRAPH_SPLIT = re.compile(r"\n\s*\n")
 
 @dataclass
 class Chunk:
@@ -80,7 +82,81 @@ def fallback_split(
     return chunks
 
 
-def split_documents(documents: list[Document]) -> list[Chunk]:
+def split_documents(
+    documents: list[Document],
+    target_min: int = 250,
+    target_max: int = 400,
+    hard_cap: int = 700,
+) -> list[Chunk]:
+    """
+    Splits on paragraph/ sentence boundaries, trageting 250-400 characters.
+    Falls back to a hard character cut only when a single sentence exceeds
+    hard_cap. Overlap carries the last sentence of a chunk into the next.
+    """
+
+    chunks: list[Chunk] = []
+
+    for doc in documents:
+        paragraphs = [p.strip() for p in _PARAGRAPH_SPLIT.split(doc.text) if p.strip()]
+        index = 0
+        current = ""
+
+        def emit(text: str):
+            nonlocal index
+            text = text.strip()
+            if text:
+                chunks.append(
+                    Chunk(
+                        text=text,
+                        source=doc.source,
+                        index=index,
+                        produced_by="chunker.py::split_documents",
+                    )
+                )
+                index += 1
+        
+        for para in paragraphs:
+            sentences = [s.strip() for s in _SENTENCE_SPLIT.split(para) if s.strip()]
+
+            for sent in sentences:
+                # A single sentence longer than hard_cap gets hard-cut on its own -
+                # this should be rare; it's the fallback, not the default path.
+		
+                if len(sent) > hard_cap:
+                    if current:
+                        emit(current)
+                        current = ""
+                    start = 0
+                    while start < len(sent):
+                        piece = sent[start : start + hard_cap]
+                        emit(piece)
+                        start += hard_cap
+                    continue
+
+                candidate = f"{current} {sent}".strip() if current else sent
+
+                if len(candidate) <= target_max:
+                    current = candidate
+                else:
+                    # Current chunk is full - emit it, then start the next one
+                    # by carrying its last sentence forward as overlap
+                    emit(current)
+                    last_sentence = _SENTENCE_SPLIT.split(current)[-1]
+                    current = f"{last_sentence} {sent}".strip()
+	
+            # Prefer to end a chunk at a paragraph boundary once it's already
+            # hit the target_min, rather than dragging the next topic into it.
+            if current and len(current) >= target_min:
+                emit(current)
+                current = ""
+        
+        if current:
+            emit(current)
+
+    return chunks 
+
+
+ 
     """
     Split documents into chunks. ⚠️ REPLACE THE BODY OF THIS IN MILESTONE 3.
 

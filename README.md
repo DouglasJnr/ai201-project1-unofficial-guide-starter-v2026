@@ -1,20 +1,6 @@
 # The Unofficial Guide
 
-<!-- Replace this line with your name and which corpus you picked. -->
-
-> **This file is your submission.** Fill it in as you go — most sections get
-> written during the milestone that produces them, not at the end.
->
-> How the starter works, and every command you'll need, is in `RUNNING.md`.
-> Leave that file alone.
->
-> **Paste everything as text.** No screenshots, no video. A typed table gets
-> full credit; a picture of the same table gets none.
->
-> Delete these instruction blocks as you replace them. The `<!-- -->` comments
-> are notes to you and don't show up when the page renders — you can leave them
-> or remove them.
-
+# Douglas Tanyanyiwa Corpus: City_Guides
 ---
 
 # Unit 1
@@ -29,8 +15,11 @@
 
 ## Chunking Strategy
 
-**Chunk size:**
-**Overlap:**
+**Chunk size:325**
+**Overlap:1 sentence(final sentence of each chunk is repeatd as the opening of the next), rather than a fixed character count.**
+
+My documents are long sectioned guides as opposed to short posts.Therefore I decided to implement a target range for my chunk size (250-400 characters) for my chunk size with a hard ceiling of 700 characters which only triggers if a single paragraph/sentence exceeds this because I'm using paragraph/sentence split as opposed to a hard-cut character count. This then led me to use the last sentence of the previous chunk as overlap as opposed to n characters of overlap.
+My decision to use these metrics is because of the criteria I used and the nature of the documents. Most answers may be found in a thought window of approximately 2-3 sentences, but to ensure my criteria would be met and without the trade-off of potentially sacrificing a complete thought, or not getting an answer from the pre-determined document to satisy criteria 5.
 
 <!-- What about YOUR documents made you pick these numbers? Short posts and
      long sectioned guides don't want the same chunking, and "800 seemed
@@ -53,29 +42,41 @@
 
      Milestone 3. -->
 
-**Chunk 1** — source: `` — produced by: ``
+**Chunk 1** — source: guide_accessibility.md#0 `` — produced by: chunker.py::split_documents ``
 
 ```
+# Getting around the region with limited mobility An honest assessment rather than a promotional one. Some of these places are
+difficult and it is better to know in advance. ## Straightforward **Thornby Wells** is the easiest town in the region. It is flat, compact, and
+everything is within three minutes of everything else. Parking is free for two
+hours anywhere in town and the station is central.
 ```
 
-**Chunk 2** — source: `` — produced by: ``
+**Chunk 2** — source: guide_corry_vale.md#5 `` — produced by: chunker.py::split_documents ``
 
 ```
+## Where to stay Perhaps thirty beds in the entire valley, spread across two pubs and a handful of farmhouse rooms. In summer these are booked months ahead. Camping is permitted on two marked fields and nowhere else. ## When to go May to September.
 ```
 
-**Chunk 3** — source: `` — produced by: ``
+**Chunk 3** — source: guide_givens_mill.md#2 `` — produced by: chunker.py::split_documents ``
 
 ```
+## Eat and drink A tearoom attached to the mill, open 10 to 4 daily except Tuesdays, which sells bread made from the flour ground twenty metres away and is the reason most people come. One pub, food served lunchtimes and Thursday to Saturday evenings.
 ```
 
-**Chunk 4** — source: `` — produced by: ``
+**Chunk 4** — source: guide_marchwood.md#0 `` — produced by: chunker.py::split_documents ``
 
 ```
+# Marchwood Marchwood is the regional hub — 180,000 people, the junction everyone changes trains at, and a city most visitors pass through rather than stop in. That is a mistake, though an understandable one, since almost nothing of interest is near the station.
 ```
 
-**Chunk 5** — source: `` — produced by: ``
+**Chunk 5** — source: guide_regional_transport.md#4 `` — produced by: chunker.py::split_documents ``
 
 ```
+The Kestrelford approach is single-track with passing places
+for the final eight minutes. The Halden Bay coast road is cut into the cliff
+and is slow rather than difficult. Parking is the constraint rather than driving. Both Halden Bay lots fill by
+10am on summer weekends. Kestrelford's lower car park is free and involves a
+steep walk up.
 ```
 
 ## Sample Answer
