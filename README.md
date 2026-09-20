@@ -7,40 +7,20 @@
 
 ## What This Does
 
-<!-- Three or four sentences. Which corpus you picked, and the kinds of
-     questions your system answers. Write it for someone who has never seen
-     this repo.
-
-     Milestone 5. -->
+For this Aassignment I picked the City_Guides corpus which covers information about towns in a region. My sytstem answersa range of practical, location-specific questions such as public transit, restaurant operating hours, accessibility of local towns and regional lookups spanning multiple locations.Rather than relyin on general knowledge, it retrieves relevant passages from the corpus and answers strictly based on that grounded context. If the syste cannot retrieve any or enough relevant information to answer the questions  it states so, meaning questions outside of the city context will not have answers provided.. 
 
 ## Chunking Strategy
 
-**Chunk size:325**
-**Overlap:1 sentence(final sentence of each chunk is repeatd as the opening of the next), rather than a fixed character count.**
+**Chunk size: 325**
+
+**Overlap: 1 sentence(final sentence of each chunk is repeatd as the opening of the next), rather than a fixed character count.**
 
 My documents are long sectioned guides as opposed to short posts.Therefore I decided to implement a target range for my chunk size (250-400 characters) for my chunk size with a hard ceiling of 700 characters which only triggers if a single paragraph/sentence exceeds this because I'm using paragraph/sentence split as opposed to a hard-cut character count. This then led me to use the last sentence of the previous chunk as overlap as opposed to n characters of overlap.
 My decision to use these metrics is because of the criteria I used and the nature of the documents. Most answers may be found in a thought window of approximately 2-3 sentences, but to ensure my criteria would be met and without the trade-off of potentially sacrificing a complete thought, or not getting an answer from the pre-determined document to satisy criteria 5.
 
-<!-- What about YOUR documents made you pick these numbers? Short posts and
-     long sectioned guides don't want the same chunking, and "800 seemed
-     reasonable" earns nothing. Point at something you noticed when you read
-     the documents in Milestone 1.
-
-     If you changed your mind partway through, say so and say why. That's worth
-     more than pretending you got it right first time.
-
-     Milestone 3. -->
 
 ## Sample Chunks
 
-<!-- Five chunks, pasted as text. Label each one and name the file it came from
-     AND the function that produced it — the grader checks your code against
-     what you claim here.
-
-     `python app.py chunks -n 5` prints all three for you. Copy them straight
-     across.
-
-     Milestone 3. -->
 
 **Chunk 1** — source: guide_accessibility.md#0 `` — produced by: chunker.py::split_documents ``
 
@@ -81,45 +61,39 @@ steep walk up.
 
 ## Sample Answer
 
-<!-- One complete question and answer, pasted as text, with the source line
-     visible. Milestone 4. -->
+**Question: Answer using only the information in the documents below. If they don't cover it, say you don't have enough information.What are the business operation hours where I can buy food to eat outside Matchwood?**
 
-**Question:**
+**Answer: Based on the provided documents, food options and their hours outside of Marchwood include:
 
-**Answer:**
+* **Elder Ness:** One pub serves food from 12 to 2 and 6 to 8, and is closed on Mondays. A shop sells basics and closes at 5pm and all day Sunday. (*guide_elder_ness.md*)
+* **Corry Vale:** One pub in the largest village serves food seven days a week, and a second pub opens Thursday to Sunday. A farm shop closes at 4pm. (*guide_corry_vale.md*)
+* **Kestrelford:** Pubs serve food between 12 and 2 and again between 6 and 8:30 (there is nowhere to eat outside these windows). A bakery sells out by 11am. (*guide_kestrelford.md* and *guide_eating.md*)
+* **General Region:** Outside Marchwood, kitchens across the region stop serving at 9pm and often earlier. (*guide_eating.md*)** 
 
 ```
+Sources retrieved: guide_corry_vale.md, guide_eating.md, guide_elder_ness.md, guide_kestrelford.md, guide_marchwood.md
 ```
 
-**My relevance cutoff:**
-
-<!-- The number you set in config.py, and how you got there.
-
-     You ran five questions your corpus covers and the five in OUT_OF_SCOPE
-     that it clearly doesn't, and wrote down the best distance for each. What
-     did those two groups look like? Where was the gap? Put the actual numbers
-     here — the table below wants all ten rows.
-
-     Milestone 4. -->
+**My relevance cutoff: 0.6**
 
 | Question | In corpus? | Best distance |
 |---|---|---|
-|  |  |  |
+|What is the bus service like in Kestrelford throughout the week? | YES | 0.372 | 
+|What are the business operation hours where I can buy food to eat outside Matchwood? | YES | 0.431 |
+|What is the accessibility of Thornby Wells? | YES | 0.389 |
+|When is it cheapest to book tickets when traveling by railway| YES  | 0.592 |
+|Which town(s) in the region has a hospital? | YES  | 0.429 |
+|What bus terminals are there in Silicon Valley | NO | 0.665 |
+|How do I change the oil in a diesel engine?| NO | 0.876 |
+|Who won the 1994 World Cup?| NO | 0.997 |
+|What is the recommended dosage of ibuprofen for a headache?| NO | 0.841 |
+|How do I write a for loop in Rust?    | NO   | 0.861 |
 
 ## How I Used AI
 
-<!-- Two specific moments. For each: what you asked for, what came back, and
-     what you changed about it.
+**1. I asked Claude to write help me implement a chunking function that split the documents by paragraphs using a designated character window, including the 1 sentence overlap. It produced a chunk character window that was too wide and I had to correct it.**
 
-     "I asked Claude to write the chunking function from my notes. It ignored
-     the overlap, so I added that myself" is the level of detail we're after.
-     "I used AI to help me code" is not.
-
-     Milestone 5. -->
-
-**1.**
-
-**2.**
+**2. I used Claude to analyze and deliberate my chunk size and overlap for the chunker. It lost context for my criterion and I had to adjust the feedback it gave me to ensure that my chunking function would meet my criteria.  **
 
 <!-- ── Stretch features ─────────────────────────────────────────────────────
      Doing one? Say so here BEFORE you start. A feature this README never
