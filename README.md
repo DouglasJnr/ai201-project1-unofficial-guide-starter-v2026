@@ -7,7 +7,7 @@
 
 ## What This Does
 
-For this Aassignment I picked the City_Guides corpus which covers information about towns in a region. My sytstem answersa range of practical, location-specific questions such as public transit, restaurant operating hours, accessibility of local towns and regional lookups spanning multiple locations.Rather than relyin on general knowledge, it retrieves relevant passages from the corpus and answers strictly based on that grounded context. If the syste cannot retrieve any or enough relevant information to answer the questions  it states so, meaning questions outside of the city context will not have answers provided.. 
+For this Assignment I picked the City_Guides corpus which covers information about towns in a region. My sytstem answers a range of practical, location-specific questions such as public transit, restaurant operating hours, accessibility of local towns and regional lookups spanning multiple locations.Rather than relyin on general knowledge, it retrieves relevant passages from the corpus and answers strictly based on that grounded context. If the syste cannot retrieve any or enough relevant information to answer the questions  it states so, meaning questions outside of the city context will not have answers provided.. 
 
 ## Chunking Strategy
 
@@ -93,7 +93,7 @@ Sources retrieved: guide_corry_vale.md, guide_eating.md, guide_elder_ness.md, gu
 
 **1. I asked Claude to write help me implement a chunking function that split the documents by paragraphs using a designated character window, including the 1 sentence overlap. It produced a chunk character window that was too wide and I had to correct it.**
 
-**2. I used Claude to analyze and deliberate my chunk size and overlap for the chunker. It lost context for my criterion and I had to adjust the feedback it gave me to ensure that my chunking function would meet my criteria.  **
+**2. I used Claude to analyze and deliberate my chunk size and overlap for the chunker. It lost context for my criterion and I had to adjust the feedback it gave me to ensure that my chunking function would meet my criteria.**
 
 <!-- ── Stretch features ─────────────────────────────────────────────────────
      Doing one? Say so here BEFORE you start. A feature this README never
