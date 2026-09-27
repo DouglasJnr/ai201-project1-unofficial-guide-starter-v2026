@@ -156,7 +156,7 @@ Outside Marchwood, kitchens across the region stop serving at 9pm and often earl
 What bus terminals are there in Silicon Valley | 0.704 | refused |
 ```
 
-## Criterion 4 - Every answer has 5+ retrieved chunks
+## Criterion 4 - Chunk containing the answer carries the whole answer
 
 ### 3. What is the accessibility of Thornby wells — run 1
 
@@ -206,6 +206,13 @@ Source: `guide_regional_transport.md`
 | 5 | Every answer is from pre-designated document | MISSED | On each run, a question cites more than 1 or no doc at all. |
 
 ## Diagnoses
+
+### Diagnosis 1
+Question 1 asks about the bus schedule in Kestrelford. Run 1 answered and cited, run 2 refused and cited nothing, run 3 refused and cited two. This is a generation problem
+
+### Diagnosis 2
+Question 3 asks about the accesibility of Thornby Wells, and Question 1 about the bus schedule in Kestrelford. Question 3's failure is the result of a conflicting criterion problem. Criterion 5 penalizes correct behavior that leads to criteria 2 being met.
+For question 1, the model orphans ## headings and as a result is unsure which is a bus service and which isn't. Chunking splits the section label from the fact, retrieval returned those, and generation refused to answer something the material did not support.
 
 <!-- For each miss: which stage caused it, and how. The stage alone isn't
      enough — you need the mechanism.
