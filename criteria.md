@@ -64,6 +64,10 @@ The out-of-scope questions can be close to the boundary depending on vocabulary 
 
 For all 5 of my test questions,there are at least 5 retrieved chunks.
 
+**Revised in unit 2:** For at least 4 of 5 test questions, the chunk containing the answer carries the whole answer.
+ 
+**Why revised:** The original couldn't measure anything. "At least 5 retrieved chunks" is fully determined by TOP_K, a constant in config.py: at TOP_K=6 it was automatically 5/5 and could not fail, and when I changed TOP_K to 3 it became 0/5 and could not pass. Neither outcome says anything about whether my chunks are the right size, which is what Milestone 3 asked. The replacement observes the chunks themselves and gives the same result at either TOP_K.
+
 <!-- YOU WRITE THIS ONE.
 
      How would you know if your chunks were the right size? Name something

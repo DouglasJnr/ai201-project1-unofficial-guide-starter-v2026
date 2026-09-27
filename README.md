@@ -122,15 +122,69 @@ Sources retrieved: guide_corry_vale.md, guide_eating.md, guide_elder_ness.md, gu
 
 | Criterion | Target | Run 1 | Run 2 | Run 3 | Verdict |
 |---|---|---|---|---|---|
-| 1. Retrieved chunk contains the answer | 4 of 5 |  |  |  |  |
-| 2. Every answer names a source | 5 of 5 |  |  |  |  |
-| 3. Gate stops out-of-corpus questions | 4 of 5 |  |  |  |  |
-| 4. | | | | | |
-| 5. | | | | | |
+| 1. Retrieved chunk contains the answer | 4 of 5 | 5/5 | 5/5 | 5/5 | MET |
+| 2. Every answer names a source | 5 of 5 | 5/5 | 4/5 | 5/5 | MISSED |
+| 3. Gate stops out-of-corpus questions | 4 of 5 | 5/5 | 5/5 | 5/5 | MET |
+| 4. Chunk containing the answer carries the whole answer| 4 of 5 | 5/5| 4/5 | 4/5 | MET |
+| 5. Every answer is from pre-designated document| 5 of 5 | 4/5 | 3/5 | 3/5 | MISSED |
+
+## Criterion 1 - Retrieved chunk contains the answer
+
+### 1. What is the bus service schedule in Kestrelford throughout the week — run 1
+
+- Best distance: 0.2824 (passed the gate)
+- Sources retrieved: guide_accessibility.md, guide_eating.md, guide_kestrelford.md, guide_regional_transport.md, guide_seasons.md
+
+```
+Based on the provided documents, the Kestrelford service runs hourly on weekdays, two-hourly on Saturdays, and does not run on Sundays (guide_regional_transport.md).
+```
+
+## Criterion 2 - Every answer names a source
+
+### 2. What are the operation hours where I can buy food outside Marchwood — run 1
+
+- Best distance: 0.2988 (passed the gate)
+- Sources retrieved: guide_accessibility.md, guide_eating.md, guide_marchwood.md, guide_thornby_wells.md
+
+```
+Outside Marchwood, kitchens across the region stop serving at 9pm and often earlier. Kestrelford's pubs serve from 12 to 2 and 6 to 8:30, and Elder Ness has one pub (closed Mondays). (Source: guide_eating.md)
+```
+
+## Criterion 3 -
+
+```
+What bus terminals are there in Silicon Valley | 0.704 | refused |
+```
+
+## Criterion 4 - Every answer has 5+ retrieved chunks
+
+### 3. What is the accessibility of Thornby wells — run 1
+
+- Best distance: 0.3770 (passed the gate)
+- Sources retrieved: guide_accessibility.md, guide_thornby_wells.md, guide_walking.md
+
+```
+
+Thornby Wells is the easiest town in the region for limited mobility because it is flat, compact, and everything is within three minutes of everything else, with free parking for two hours and a central station (guide_accessibility.md). Additionally, it features flat, formal gardens and level streets, making it the region's most accessible town on foot (guide_walking.md).
+```
+
+## Criterion 5 - Every answer is from pre-designated document
+
+### 4. When is it cheapest to book tickets when travelling by railway — run 1
+
+- Best distance: 0.5965 (passed the gate)
+- Sources retrieved: guide_accessibility.md, guide_kestrelford.md, guide_marchwood.md, guide_regional_transport.md
+
+```
+Tickets are considerably cheaper when booked a week ahead than when booked the day before or on the day. 
+
+Source: `guide_regional_transport.md`
+```
 
 <!-- Underneath, paste the REAL output for each criterion from one of your
      runs — the actual text your system produced, not a description of it.
      Name the file and function that produced it. -->
+
 
 ## Verdicts
 
@@ -145,11 +199,11 @@ Sources retrieved: guide_corry_vale.md, guide_eating.md, guide_elder_ness.md, gu
 
 | # | Criterion | Verdict | How I decided |
 |---|---|---|---|
-| 1 |  |  |  |
-| 2 |  |  |  |
-| 3 |  |  |  |
-| 4 |  |  |  |
-| 5 |  |  |  |
+| 1 | Retrieved chunk contains the answer | MET  | Every question retrieved a document containing the answer. Retrieval succeeded, but generation failed. |
+| 2 | Every answer names a source | MISSED | Run 2 of Q1 does not name a source, and so 1 miss equal a miss. |
+| 3 | Gate stops out-of-corpus questions | MET | No out-of-corpus question passes the gate.  |
+| 4 | Answer's chunk carries the whole fact | MET | Each question returns a chunk carrying the entire fact |
+| 5 | Every answer is from pre-designated document | MISSED | On each run, a question cites more than 1 or no doc at all. |
 
 ## Diagnoses
 
