@@ -95,6 +95,10 @@ Sources retrieved: guide_corry_vale.md, guide_eating.md, guide_elder_ness.md, gu
 
 **2. I used Claude to analyze and deliberate my chunk size and overlap for the chunker. It lost context for my criterion and I had to adjust the feedback it gave me to ensure that my chunking function would meet my criteria.**
 
+**3. I used Claude to evaluate and explain the discrepencies between my run log answers and the reults from the test evaluation runs. My results felt inflated, and I had to ensure I was analyzing my work critically without bias.**
+
+**4. I asked Claude to help me evaluate my proposed fix for the diagnosis which was to modify my chunker as I believed that was where the problems were coming from. After considering it's feedback I opted to first alter my top-k chunks which showed improvement for one question and criteria, while highlighting an additional issue to fix with the scorer.**
+
 <!-- ── Stretch features ─────────────────────────────────────────────────────
      Doing one? Say so here BEFORE you start. A feature this README never
      claims earns nothing.
@@ -125,8 +129,10 @@ Sources retrieved: guide_corry_vale.md, guide_eating.md, guide_elder_ness.md, gu
 | 1. Retrieved chunk contains the answer | 4 of 5 | 5/5 | 5/5 | 5/5 | MET |
 | 2. Every answer names a source | 5 of 5 | 5/5 | 4/5 | 5/5 | MISSED |
 | 3. Gate stops out-of-corpus questions | 4 of 5 | 5/5 | 5/5 | 5/5 | MET |
-| 4. Chunk containing the answer carries the whole answer| 4 of 5 | 5/5| 4/5 | 4/5 | MET |
+| 4. Chunk containing the answer carries the whole answer| 4 of 5 | 4/5| 4/5 | 4/5 | MET |
 | 5. Every answer is from pre-designated document| 5 of 5 | 4/5 | 3/5 | 3/5 | MISSED |
+
+**NOTE** Even though Criterion 1 was met (when looking at real output), the test runs show q1 as having failed all runs due to the answer not matching 'expects' despite the retrieved chunk containing the answer. 
 
 ## Criterion 1 - Retrieved chunk contains the answer
 
@@ -208,11 +214,12 @@ Source: `guide_regional_transport.md`
 ## Diagnoses
 
 ### Diagnosis 1
-Question 1 asks about the bus schedule in Kestrelford. Run 1 answered and cited, run 2 refused and cited nothing, run 3 refused and cited two. This is a generation problem
+Question 1 asks about the bus schedule in Kestrelford. Run 1 answered and cited, run 2 refused and cited nothing, run 3 refused and cited two. This is a generation problem caused by the retrieval mechanism returning too many chunks.
 
 ### Diagnosis 2
 Question 3 asks about the accesibility of Thornby Wells, and Question 1 about the bus schedule in Kestrelford. Question 3's failure is the result of a conflicting criterion problem. Criterion 5 penalizes correct behavior that leads to criteria 2 being met.
 For question 1, the model orphans ## headings and as a result is unsure which is a bus service and which isn't. Chunking splits the section label from the fact, retrieval returned those, and generation refused to answer something the material did not support.
+
 
 <!-- For each miss: which stage caused it, and how. The stage alone isn't
      enough — you need the mechanism.
@@ -235,8 +242,10 @@ For question 1, the model orphans ## headings and as a result is unsure which is
 ## The Improvement
 
 **What I changed:**
+Changed the top_k value in config.py from 6 to 3.
 
 **Why I picked it:**
+I picked this change because the retrieval stage was returning too many chunks for the model to process, leading to generation failures. By reducing the number of retrieved chunks, I aimed to improve the model's ability to generate accurate answers with proper citations.
 
 <!-- Connect it to a specific diagnosis above in one sentence. If you can't,
      you picked a fix because it sounded impressive. -->
@@ -248,14 +257,15 @@ For question 1, the model orphans ## headings and as a result is unsure which is
 
 | Criterion | Target | Run 1 | Run 2 | Run 3 | Verdict |
 |---|---|---|---|---|---|
-| 1. Retrieved chunk contains the answer | 4 of 5 |  |  |  |  |
-| 2. Every answer names a source | 5 of 5 |  |  |  |  |
-| 3. Gate stops out-of-corpus questions | 4 of 5 |  |  |  |  |
-| 4. | | | | | |
-| 5. | | | | | |
+| 1. Retrieved chunk contains the answer | 4 of 5 | 5/5 | 5/5 | 5/5  | MET  |
+| 2. Every answer names a source | 5 of 5 | 5/5 | 5/5 | 5/5 | MET  |
+| 3. Gate stops out-of-corpus questions | 4 of 5 | 5/5 | 5/5 | 5/5 | MET  |
+| 4. Chunk containing the answer carries the whole answer| 4 of 5 | 4/5 | 4/5 | 4/5 | MET |
+| 5. Every answer is from pre-designated document | 5 of 5 | 3/5 | 4/5 | 3/5 | MISSED|
 
 **Did it help?**
 
+The changed helped one aspect and backfired in another. For Question 1, the model answered all including citations. Criterion 1,2,3,and 4 were all MET, but only 5 missed. Based off the scorer, Q1 has 2 passes instead of only 1, but for questions 4 and 5 all the runs were fails. At face value this would appear as a erro that criteria are met but the run log shows failures, however this is due to the scorer being the limitation as some answers don't match what was required by 'expects' in the scorer.
 <!-- Say plainly whether it did, and how you know. If it made things worse,
      say that — a change that backfired, honestly reported, earns full credit
      and is more interesting than one that worked. What matters is that you can
@@ -264,6 +274,7 @@ For question 1, the model orphans ## headings and as a result is unsure which is
      Milestone 4. -->
 
 ## What's Still Broken
+The Criterion themselves are not the ones broken, as evidenced by seeing all the 'fail' runs that still meet the criteria. Criteria 1 and 2 are judged on the retrieved chunks and the answer text, not on scorer.py's substring verdict. Due to the function's nature, the scorer under-reports because expects requires verbatim phrasing. This is what leads to the discrepency between the test run results an the run log findings. I would therefore proceed to modify the scorer.py to add refusal detection, and revise my 'expects' phrases from the 1st unit which were also weak to improve the system. 
 
 <!-- For each criterion still missed after your fix: what you'd do about it,
      and why you stopped where you did.
@@ -274,6 +285,7 @@ For question 1, the model orphans ## headings and as a result is unsure which is
      Milestone 5. -->
 
 ## What I'd Do Differently
+I would rewrite Criteria 5 differently. It was an oversight on my part to use a criteria that penalizes correct system behavior to output at least one source by then restricting it to only one source in my own criteria. It may have been beneficial for further refinement purposes to evaluate how well the system performs, but not as a system criteria.
 
 <!-- Knowing what you know now — which of your five criteria would you write
      differently, and why?
